@@ -8,9 +8,6 @@ This project uses:
 - Nextjs
 - Flask
 
-## Using the Scraper
-
-
 ### Python Flask Backend
 
 - `cd backend`
