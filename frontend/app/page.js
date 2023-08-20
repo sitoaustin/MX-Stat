@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
   return (
     <main>
       <h1>Hello there</h1>
+      <Link href={'/chart'}>CHART PAGE</Link>
     </main>
   );
 }
