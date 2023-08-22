@@ -18,10 +18,10 @@ export default function Mainpage() {
       body: data,
     }).then((response) => {
       console.log(response);
-      //   response.json().then((body) => {
-      //     console.log(body);
-      //     // setImageST({ imageURL: `http://localhost:5000/${body.file}` });
-      //   });
+      response.json().then((body) => {
+        console.log(body);
+        setImageST({ imageURL: `http://localhost:5000/${body.file}` });
+      });
     });
   }
 
@@ -48,7 +48,7 @@ export default function Mainpage() {
       <div>
         <button>Upload</button>
       </div>
-      <img src={imgST} alt='img' />
+      {imgST && <img src={imgST.imageURL} alt='img' />}
     </form>
   );
 }
