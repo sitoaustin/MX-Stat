@@ -3,6 +3,8 @@ import os
 from flask import Flask, flash, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
+import csv
+
 import logging
 
 app = Flask(__name__)
@@ -28,5 +30,10 @@ def fileUpload():
     file = request.files['file'] 
     logger.info("welcome to upload`")
     file.save(os.path.join(folder_path,secure_filename(file.filename))) # Then save the file
-    response = {"moon": "moon"}
-    return response
+    # Reading the file and parsing the files.
+    fileContent = []
+    with open("{}/{}".format(folder_path,file.filename), 'r') as file_to_read:
+        reader = csv.reader(file_to_read)
+        for row in reader:
+            fileContent.append(row)
+    return fileContent

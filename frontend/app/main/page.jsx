@@ -1,14 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Chart from 'chart.js/auto';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 
 export default function Mainpage() {
-  const [imgST, setImageST] = useState();
   const [uploadInput, setuploadInput] = useState();
   const [fileName, setfileName] = useState();
+  const [labels, setLabels] = useState([]);
+  const [fileData, setFileData] = useState([]);
 
-  function handleUploadImage(ev) {
-    ev.preventDefault();
-
+  function handleUploadImage(e) {
+    e.preventDefault();
     const data = new FormData();
     data.append('file', uploadInput.files[0]);
     data.append('filename', fileName.value);
@@ -17,14 +19,32 @@ export default function Mainpage() {
       method: 'POST',
       body: data,
     }).then((response) => {
-      console.log(response);
       response.json().then((body) => {
-        console.log(body);
-        setImageST({ imageURL: `http://localhost:5000/${body.file}` });
+        const labelsContent = [...labels];
+        const fileDataContent = [...fileData];
+        for (let items of body) {
+          labelsContent.push(items[0]);
+          fileDataContent.push(items[1]);
+        }
+        setLabels(labelsContent);
+        setFileData(fileDataContent);
       });
     });
   }
+  //   useEffect(() => {}, [labels, fileData]);
 
+  //   Displaying the chart
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'My dataset',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: [...fileData],
+      },
+    ],
+  };
   return (
     <form onSubmit={handleUploadImage}>
       <div>
@@ -48,7 +68,11 @@ export default function Mainpage() {
       <div>
         <button>Upload</button>
       </div>
-      {imgST && <img src={imgST.imageURL} alt='img' />}
+      {labels && (
+        <div>
+          <Bar data={data} />
+        </div>
+      )}
     </form>
   );
 }
