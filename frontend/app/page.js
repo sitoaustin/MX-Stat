@@ -13,9 +13,8 @@ export default function Home() {
       });
   }, []);
   return (
-    <main>
-      <h1>Hello there</h1>
-      <Link href={'/chart'}>CHART PAGE</Link>
+    <main className='flex flex-col'>
+      <h1>HOME PAGE</h1>
     </main>
   );
 }
