@@ -3,6 +3,7 @@ import os
 from flask import Flask, flash, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
+from flask_sqlalchemy import SQLAlchemy
 import csv
 
 import logging
@@ -10,6 +11,11 @@ import logging
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ee6927c7fc78a6e79ac0d3fd1d4054f9'
 app.config['UPLOAD_FOLDER'] = 'static/files'
+
+# To SET our data base location (sqlite:/// - path where we want out database to be)
+app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///mxstat.db'
+# to create a database instance
+db = SQLAlchemy(app)
 
 CORS(app, origins=['http://localhost:3000'])
 logging.basicConfig(level=logging.INFO)
@@ -37,3 +43,7 @@ def fileUpload():
         for row in reader:
             fileContent.append(row)
     return fileContent
+
+@app.route('/savetodb', methods=['POST', 'GET'])
+def saveToDB():
+    return 'Successfully uploaded'
