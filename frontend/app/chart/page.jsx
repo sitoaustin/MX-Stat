@@ -1,11 +1,25 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Chart from 'chart.js/auto';
+import { NextApiRequest } from 'next';
+import Chart, { LogarithmicScale } from 'chart.js/auto';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import Image from 'next/image';
 import CSV_ICON from '../../public/csv_icon.svg';
+import { getSession } from 'next-auth/react';
 
 export default function Mainpage() {
+  const [user, setUser] = useState();
+  const [email, setEmail] = useState();
+  useEffect(() => {
+    async function userSession() {
+      await getSession().then((data) => {
+        setUser(data.user.name);
+        setEmail(data.user.email);
+      });
+    }
+    userSession();
+  }, []);
+  console.log(email, user);
   const [doneUploaded, setDoneUploaded] = useState(false);
   const [uploadInput, setuploadInput] = useState();
   const [fileName, setfileName] = useState();
@@ -152,7 +166,10 @@ export default function Mainpage() {
         </>
       ) : (
         <div>
-          <Bar data={data} />
+          <>
+            <Bar data={data} />
+            {user && email && <button>Save</button>}
+          </>
         </div>
       )}
     </>
