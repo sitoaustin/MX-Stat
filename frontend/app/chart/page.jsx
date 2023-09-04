@@ -8,25 +8,24 @@ import CSV_ICON from '../../public/csv_icon.svg';
 import { getSession } from 'next-auth/react';
 
 export default function Mainpage() {
-  const [user, setUser] = useState();
-  const [email, setEmail] = useState();
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState(null);
   useEffect(() => {
     async function userSession() {
       await getSession().then((data) => {
-        setUser(data.user.name);
-        setEmail(data.user.email);
+        setUser(data?.user.name);
+        setEmail(data?.user.email);
       });
     }
     userSession();
   }, []);
-  console.log(email, user);
   const [doneUploaded, setDoneUploaded] = useState(false);
   const [uploadInput, setuploadInput] = useState();
   const [fileName, setfileName] = useState();
   const [labels, setLabels] = useState([]);
   const [fileData, setFileData] = useState([]);
 
-  function handleUploadImage(e) {
+  function handleUploadFile(e) {
     e.preventDefault();
     const data = new FormData();
     data.append('file', uploadInput.files[0]);
@@ -50,7 +49,31 @@ export default function Mainpage() {
     setDoneUploaded(!doneUploaded);
   }
 
-  //   Displaying the chart
+  // To save the file
+  function handleSaveFile(e) {
+    e.preventDefault();
+    const data = new FormData();
+    data.append('file', uploadInput.files[0]);
+    data.append('filename', fileName.value);
+
+    fetch('http://localhost:5000/register', {
+      method: 'POST',
+      body: data,
+    }).then((response) => {
+      response.json().then((body) => {
+        const labelsContent = [...labels];
+        const fileDataContent = [...fileData];
+        for (let items of body) {
+          labelsContent.push(items[0]);
+          fileDataContent.push(items[1]);
+        }
+        console.log(labelsContent);
+        console.log(fileDataContent);
+      });
+    });
+  }
+
+  //   Chat data
   const data = {
     labels: labels,
     datasets: [
@@ -73,7 +96,7 @@ export default function Mainpage() {
                 <h1 className='font-semibold text-3xl'>Get Sales Insight</h1>
               </div>
               <form
-                onSubmit={handleUploadImage}
+                onSubmit={handleUploadFile}
                 className='border-dashed border-2 border-blue-600 w-full flex items-center flex-col pt-10 h-[400px] rounded-2xl '
               >
                 <Image
@@ -81,7 +104,7 @@ export default function Mainpage() {
                   alt='csv icon'
                   height={10}
                   width={10}
-                  className='w-[100px] '
+                  className='w-[100px]'
                   priority
                 />
                 <div className='mt-5 w-full flex justify-center flex-col items-center'>
@@ -91,6 +114,7 @@ export default function Mainpage() {
                   <input
                     id='file'
                     ref={(ref) => {
+                      console.log(ref);
                       setuploadInput(ref);
                     }}
                     type='file'
@@ -168,7 +192,16 @@ export default function Mainpage() {
         <div>
           <>
             <Bar data={data} />
-            {user && email && <button>Save</button>}
+            {user && email && (
+              <div className='flex w-full items-center justify-center'>
+                <button
+                  onClick={handleSaveFile}
+                  className='bg-blue-400 h-16 w-24 '
+                >
+                  Save
+                </button>
+              </div>
+            )}
           </>
         </div>
       )}
