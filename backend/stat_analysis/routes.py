@@ -5,10 +5,6 @@ from werkzeug.utils import secure_filename
 from stat_analysis.models import User, Post
 from stat_analysis import app, db, CORS, cross_origin
 from flask import Flask, flash, request, redirect, url_for, session
-
-
-
-
 import logging
 
 
@@ -17,6 +13,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger('HELLO WORLD')
+
+# Current file holder
+file_path = ''
 
 
 @app.route("/")
@@ -33,7 +32,8 @@ def fileUpload():
         os.makedirs(folder_path)
     file = request.files['file'] 
     logger.info("welcome to upload`")
-    file.save(os.path.join(folder_path,secure_filename(file.filename))) # Then save the file
+    file_path = os.path.join(folder_path,secure_filename(file.filename))
+    file.save(file_path) # Then save the file
     # Reading the file and parsing the files.
     fileContent = []
     with open("{}/{}".format(folder_path,file.filename), 'r') as file_to_read:
@@ -44,8 +44,10 @@ def fileUpload():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    if(len(file_path) > 0):
+        return file_path
     data = request.get_json(force=True)
-    user = User(username=data['name'], email=data['email'])
-    db.session.add(user)
-    db.session.commit()
+        # user = User(username=data['name'], email=data['email'])
+        # db.session.add(user)
+        # db.session.commit()
     return data
