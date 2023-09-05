@@ -31,9 +31,21 @@ export default function Mainpage() {
 
   function handleUploadFile(e) {
     e.preventDefault();
+    // Register User
+    fetch('http://localhost:5000/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: user,
+        email: email,
+      }),
+    });
+
+    // /////////
     const data = new FormData();
     data.append('file', uploadInput.files[0]);
     data.append('filename', fileName.value);
+    data.append('email', email);
+
     setMainFileData(data);
 
     fetch('http://localhost:5000/upload', {
@@ -81,7 +93,7 @@ export default function Mainpage() {
     <>
       {!doneUploaded ? (
         <>
-          <div className='bg-blue-400 w-full max-h-[80vh] pt-20'>
+          <div className='bg-teal-600 w-full max-h-[80vh] pt-20'>
             <div className='bg-white w-[80%] mx-auto rounded-2xl p-10 shadow-2xl '>
               <div className='w-full flex items-center justify-center flex-col mb-5'>
                 <h3>MX-STAT</h3>
@@ -89,7 +101,7 @@ export default function Mainpage() {
               </div>
               <form
                 onSubmit={handleUploadFile}
-                className='border-dashed border-2 border-blue-600 w-full flex items-center flex-col pt-10 h-[400px] rounded-2xl '
+                className='border-dashed border-2 border-teal-600 w-full flex items-center flex-col pt-10 h-[400px] rounded-2xl '
               >
                 <Image
                   src={CSV_ICON}
@@ -123,7 +135,7 @@ export default function Mainpage() {
                 </div>
                 <br />
                 <div>
-                  <button className='bg-blue-600 text-white h-14 w-[200px] rounded-full'>
+                  <button className='bg-teal-600 text-white h-14 w-[200px] rounded-full'>
                     Upload
                   </button>
                 </div>
