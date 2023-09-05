@@ -5,12 +5,19 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    posts = db.relationship('Post', backref='author', lazy=True)
-
+    # posts = db.relationship('Post', backref='author', lazy=True)
+    uploads = db.relationship('Upload', backref='author', lazy=True)
     # __repre__ method is a magic method of how our object 
     # is printed when we print it out
     def __repre__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+
+class Upload(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
 
 
 class Post(db.Model):
@@ -21,6 +28,8 @@ class Post(db.Model):
     
     def __repre__(self):
         return f"Post('{self.title}', '{self.content}')"
+    
+
 
 
 # ...

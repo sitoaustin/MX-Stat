@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { NextApiRequest } from 'next';
 import Chart, { LogarithmicScale } from 'chart.js/auto';
 import { Bar, Line, Pie } from 'react-chartjs-2';
 import Image from 'next/image';
@@ -22,20 +21,27 @@ export default function Mainpage() {
   const [doneUploaded, setDoneUploaded] = useState(false);
   const [uploadInput, setuploadInput] = useState();
   const [fileName, setfileName] = useState();
+  const [mainFileData, setMainFileData] = useState();
   const [labels, setLabels] = useState([]);
   const [fileData, setFileData] = useState([]);
+
+  // Getting UserPosts
+  const [saved, setSaved] = useState(false);
+  const [userPost, setUserPosts] = useState();
 
   function handleUploadFile(e) {
     e.preventDefault();
     const data = new FormData();
     data.append('file', uploadInput.files[0]);
     data.append('filename', fileName.value);
+    setMainFileData(data);
 
     fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: data,
     }).then((response) => {
       response.json().then((body) => {
+        console.log(body);
         const labelsContent = [...labels];
         const fileDataContent = [...fileData];
         for (let items of body) {
@@ -52,25 +58,11 @@ export default function Mainpage() {
   // To save the file
   function handleSaveFile(e) {
     e.preventDefault();
-    const data = new FormData();
-    data.append('file', uploadInput.files[0]);
-    data.append('filename', fileName.value);
-
-    fetch('http://localhost:5000/register', {
+    fetch('http://localhost:5000/postdata', {
       method: 'POST',
-      body: data,
-    }).then((response) => {
-      response.json().then((body) => {
-        const labelsContent = [...labels];
-        const fileDataContent = [...fileData];
-        for (let items of body) {
-          labelsContent.push(items[0]);
-          fileDataContent.push(items[1]);
-        }
-        console.log(labelsContent);
-        console.log(fileDataContent);
-      });
+      body: mainFileData,
     });
+    setSaved(true);
   }
 
   //   Chat data
@@ -114,7 +106,6 @@ export default function Mainpage() {
                   <input
                     id='file'
                     ref={(ref) => {
-                      console.log(ref);
                       setuploadInput(ref);
                     }}
                     type='file'
@@ -193,13 +184,14 @@ export default function Mainpage() {
           <>
             <Bar data={data} />
             {user && email && (
-              <div className='flex w-full items-center justify-center'>
-                <button
-                  onClick={handleSaveFile}
-                  className='bg-blue-400 h-16 w-24 '
-                >
-                  Save
-                </button>
+              <div
+                className={`flex w-full items-center justify-center ${
+                  saved && 'hidden'
+                }`}
+              >
+                <form onSubmit={handleSaveFile}>
+                  <button className='bg-blue-400 h-16 w-24 '>Save</button>
+                </form>
               </div>
             )}
           </>

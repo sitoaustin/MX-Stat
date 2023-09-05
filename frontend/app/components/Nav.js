@@ -23,19 +23,21 @@ export default function Nav({ user }) {
         )}
         {user && (
           <>
-            <li>
-              <Image
-                src={user?.image}
-                alt={user?.name}
-                width={36}
-                height={36}
-                className='rounded-full'
-              />
-            </li>
+            <Link href={'/profile'}>
+              <li>
+                <Image
+                  src={user?.image}
+                  alt={user?.name}
+                  width={36}
+                  height={36}
+                  className='rounded-full'
+                />
+              </li>
+            </Link>
+
             <li className='bg-teal-600 text-white py-2 px-4 rounded-md '>
               <button onClick={() => signOut()}>Sign out</button>
             </li>
-            <button onClick={() => justLogit()}>create a new post</button>
           </>
         )}
       </ul>
