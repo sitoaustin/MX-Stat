@@ -23,8 +23,11 @@ export default function Nav({ user }) {
         )}
         {user && (
           <>
+            <li className='bg-teal-600 text-white py-2 px-4 rounded-md '>
+              <button onClick={() => signOut()}>Sign out</button>
+            </li>
             <Link href={'/profile'}>
-              <li>
+              <li className='ml-5'>
                 <Image
                   src={user?.image}
                   alt={user?.name}
@@ -34,10 +37,6 @@ export default function Nav({ user }) {
                 />
               </li>
             </Link>
-
-            <li className='bg-teal-600 text-white py-2 px-4 rounded-md '>
-              <button onClick={() => signOut()}>Sign out</button>
-            </li>
           </>
         )}
       </ul>
