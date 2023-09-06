@@ -3,7 +3,7 @@ import csv
 from werkzeug.utils import secure_filename
 from stat_analysis.models import User, Upload
 from stat_analysis import app, db
-from flask import  request, jsonify
+from flask import  request, jsonify, render_template
 import logging
 
 
@@ -20,7 +20,7 @@ file_path = ''
 @app.route("/")
 @app.route("/members")
 def hello_world():
-    return {"name": 'Naka'}
+    return render_template('index.html')
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
