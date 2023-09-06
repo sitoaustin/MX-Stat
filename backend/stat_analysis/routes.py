@@ -1,12 +1,10 @@
 import os
-from io import BytesIO
 import csv
 from werkzeug.utils import secure_filename
-from stat_analysis.models import User, Post, Upload
-from stat_analysis import app, db, CORS, cross_origin
-from flask import Flask, flash, request, redirect, url_for, session, send_file, jsonify
+from stat_analysis.models import User, Upload
+from stat_analysis import app, db
+from flask import  request, jsonify
 import logging
-import json
 
 
 
@@ -72,7 +70,6 @@ def getdata():
     upload = Upload.query.filter_by(user_id=record.id).all()
     fileContents = []
     for upload_data in upload:
-        fileDetails = []
         date_posted, filename, file_id = upload_data.date_posted, upload_data.filename, upload_data.id
         lines = upload_data.data.decode('utf-8').split('\r\n')  # Decode bytes to a string and split into lines
         csv_data = [line.split(',') for line in lines if line] 
@@ -83,7 +80,6 @@ def getdata():
             "data" : csv_data,
         }
         fileContents.append(filenameNdate) # Split each line by comma into a list of items
-        # fileContents.append(csv_data)
     return jsonify(fileContents)
 
 
@@ -99,3 +95,10 @@ def register():
     return data
 
 
+@app.route('/deletedata', methods=['POST', 'GET'])
+def delete_data():
+    user_id = request.form['id']
+    record = Upload.query.filter_by(id=user_id).first()
+    db.session.delete(record)
+    db.session.commit()
+    return user_id

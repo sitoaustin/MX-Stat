@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { getSession } from 'next-auth/react';
 import Image from 'next/image';
 
@@ -24,14 +24,12 @@ export default function Profile() {
     async function getUserPost() {
       const data = new FormData();
       data.append('email', email);
-      console.log(email);
       fetch('http://localhost:5000/getdata', {
         method: 'POST',
         body: data,
       }).then((response) => {
         response.json().then((body) => {
           setUserPost(body);
-          console.log(body);
         });
       });
     }
@@ -39,17 +37,31 @@ export default function Profile() {
       getUserPost();
     }
   }, [email]);
+
+  // Delete data
+  const handleDeleteData = (post_id) => {
+    const data = new FormData();
+    data.append('id', post_id);
+    fetch('http://localhost:5000/deletedata', {
+      method: 'POST',
+      body: data,
+    }).then((response) => {
+      response.json().then((body) => {});
+    });
+  };
   return (
     <>
       <div className='mt-10'>
         <div className='flex justify-center rounded-full overflow-hidden '>
-          <Image
-            src={userImage}
-            width={50}
-            height={50}
-            alt={userImage}
-            className='h-32 w-32 rounded-full'
-          />
+          {Image && (
+            <Image
+              src={userImage}
+              width={50}
+              height={50}
+              alt={userImage}
+              className='h-32 w-32 rounded-full'
+            />
+          )}
         </div>
         <div className='flex flex-col w-full items-center my-3'>
           <h1 className='font-semibold text-2xl'>Welcome, {username}</h1>
@@ -66,7 +78,10 @@ export default function Profile() {
                 <button className='flex justify-center items-center rounded-xl bg-teal-600 w-[100px] h-full mr-5'>
                   <li className='list-none '>View</li>
                 </button>
-                <button className='flex justify-center items-center rounded-xl bg-red-600 w-[100px] h-full'>
+                <button
+                  onClick={() => handleDeleteData(data.id)}
+                  className='flex justify-center items-center rounded-xl bg-red-600 w-[100px] h-full'
+                >
                   <li className='list-none'>Delete</li>
                 </button>
               </div>

@@ -27,7 +27,7 @@ export default function Mainpage() {
 
   // Getting UserPosts
   const [saved, setSaved] = useState(false);
-  const [userPost, setUserPosts] = useState();
+  // const [userPost, setUserPosts] = useState();
 
   function handleUploadFile(e) {
     e.preventDefault();
@@ -53,7 +53,6 @@ export default function Mainpage() {
       body: data,
     }).then((response) => {
       response.json().then((body) => {
-        console.log(body);
         const labelsContent = [...labels];
         const fileDataContent = [...fileData];
         for (let items of body) {
