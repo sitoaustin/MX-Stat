@@ -20,7 +20,7 @@ file_path = ''
 @app.route("/")
 @app.route("/members")
 def hello_world():
-    return {"name": 'Naka'}
+    return "Hello"
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
