@@ -24,7 +24,7 @@ export default function Profile() {
     async function getUserPost() {
       const data = new FormData();
       data.append('email', email);
-      fetch('http://localhost:5000/getdata', {
+      fetch('http://34.229.47.30/getdata', {
         method: 'POST',
         body: data,
       }).then((response) => {
@@ -42,7 +42,7 @@ export default function Profile() {
   const handleDeleteData = (post_id) => {
     const data = new FormData();
     data.append('id', post_id);
-    fetch('http://localhost:5000/deletedata', {
+    fetch('http://34.229.47.30/deletedata', {
       method: 'POST',
       body: data,
     }).then((response) => {

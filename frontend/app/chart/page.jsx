@@ -32,7 +32,7 @@ export default function Mainpage() {
   function handleUploadFile(e) {
     e.preventDefault();
     // Register User
-    fetch('http://localhost:5000/register', {
+    fetch('http://34.229.47.30/register', {
       method: 'POST',
       body: JSON.stringify({
         username: user,
@@ -48,7 +48,7 @@ export default function Mainpage() {
 
     setMainFileData(data);
 
-    fetch('http://localhost:5000/upload', {
+    fetch('http://34.229.47.30/upload', {
       method: 'POST',
       body: data,
     }).then((response) => {
@@ -69,7 +69,7 @@ export default function Mainpage() {
   // To save the file
   function handleSaveFile(e) {
     e.preventDefault();
-    fetch('http://localhost:5000/postdata', {
+    fetch('http://34.229.47.30/postdata', {
       method: 'POST',
       body: mainFileData,
     });
