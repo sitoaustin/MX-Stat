@@ -5,14 +5,14 @@ import Link from "next/link";
 
 export default function Nav({ user }) {
   return (
-    <nav className="bg-[#008080] flex justify-between min-h-[10vh] px-2 md:px-10 items-center">
+    <nav className="bg-[#008080] flex justify-between min-h-[13vh] px-2 md:px-10 items-center">
       <ul className="flex">
         <li className="mr-5">
           <Link href={"/"}>
             <Image
               src="/mxlogo.png"
-              width={10}
-              height={10}
+              width={50}
+              height={50}
               alt=""
               className="rounded-full w-10 h-10 md:w-70 md:h-70"
             />
@@ -30,7 +30,7 @@ export default function Nav({ user }) {
         )}
         {user && (
           <>
-            <li className="bg-[#707070] text-white py-2 px-2 md:px-4 rounded-md ">
+            <li className="bg-[#707070] text-white  py-2 px-2 md:px-4 rounded-md ">
               <button onClick={() => signOut()}>Sign out</button>
             </li>
             <Link href={"/profile"}>
