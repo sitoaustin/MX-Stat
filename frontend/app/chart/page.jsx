@@ -88,6 +88,7 @@ export default function Mainpage() {
       },
     ],
   };
+
   return (
     <>
       {!doneUploaded ? (
@@ -196,7 +197,19 @@ export default function Mainpage() {
       ) : (
         <div>
           <>
-            <Bar data={data} />
+            <div className="min-h-[50vh] p-2 sm:p-20 md:p-28 lg:p-32">
+              <Bar
+                data={data}
+                options={{
+                  responsive: true,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                    },
+                  },
+                }}
+              />
+            </div>
             {user && email && (
               <div
                 className={`flex w-full items-center justify-center ${
